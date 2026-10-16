@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster — Interactive Knowledge Assessment</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html { scroll-behavior: smooth; }
+        body { font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+        button { transition: all 0.2s ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-indigo-500 selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="border-b border-slate-800 bg-slate-950/50 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-bold text-lg shadow-lg shadow-indigo-500/30 text-white">
+                    Q
+                </div>
+                <span class="font-bold text-lg tracking-tight text-white">QuizMaster</span>
+            </div>
+            <div id="header-stats" class="flex items-center gap-6 text-sm font-medium text-slate-400">
+                <div>Question: <span id="current-q-num" class="text-white font-bold">1</span>/<span id="total-q-num" class="text-white font-bold">5</span></div>
+                <div>Score: <span id="current-score" class="text-indigo-400 font-bold">0</span></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-2xl w-full mx-auto px-4 py-10 sm:py-16 flex-grow flex items-center justify-center">
+        
+        <!-- Quiz Card Container -->
+        <div id="quiz-card" class="w-full bg-slate-800/80 border border-slate-700/80 rounded-3xl p-6 sm:p-10 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+            
+            <!-- Quiz Screen -->
+            <div id="quiz-screen">
+                <!-- Progress Bar -->
+                <div class="w-full bg-slate-700/60 rounded-full h-2.5 mb-8 overflow-hidden">
+                    <div id="progress-bar" class="bg-indigo-500 h-2.5 rounded-full transition-all duration-300" style="width: 20%"></div>
+                </div>
+
+                <!-- Category & Question Title -->
+                <div class="flex items-center justify-between mb-4">
+                    <span id="question-category" class="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">Computer Science</span>
+                    <span class="text-xs font-semibold text-slate-400">Score: <span id="live-score" class="text-indigo-400 font-bold">0</span></span>
+                </div>
+                <h2 id="question-text" class="text-xl sm:text-2xl font-bold text-white leading-snug mb-8">
+                    Loading question...
+                </h2>
+
+                <!-- Options List -->
+                <div id="options-container" class="space-y-3.5">
+                    <!-- Dynamic Options -->
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-box" class="hidden mt-6 p-4 rounded-xl bg-slate-900/60 border border-slate-700 text-sm text-slate-300">
+                    <span class="font-bold text-indigo-400 block mb-1">Explanation:</span>
+                    <p id="explanation-text"></p>
+                </div>
+
+                <!-- Action Footer -->
+                <div class="mt-8 flex items-center justify-end">
+                    <button id="next-btn" class="hidden px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 flex items-center gap-2">
+                        Next Question
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Results Screen (Hidden initially) -->
+            <div id="results-screen" class="hidden text-center py-6">
+                <div class="w-20 h-20 rounded-2xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center mx-auto mb-6 text-indigo-400 text-3xl">
+                    🏆
+                </div>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Quiz Completed!</h2>
+                <p class="text-slate-400 text-sm mt-2">Here is a summary of your performance.</p>
+
+                <!-- Score Badge -->
+                <div class="my-8 p-6 rounded-2xl bg-slate-900/60 border border-slate-700 inline-block w-full max-w-xs">
+                    <span class="text-xs uppercase tracking-wider text-slate-400 font-semibold block">Final Score</span>
+                    <span id="final-score-val" class="text-4xl sm:text-5xl font-extrabold text-indigo-400 mt-2 block">0/5</span>
+                    <span id="final-percentage" class="text-xs font-semibold text-emerald-400 mt-1 block">0% Accuracy</span>
+                </div>
+
+                <!-- Restart Button -->
+                <div>
+                    <button id="restart-btn" class="px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm shadow-lg shadow-indigo-600/30 flex items-center gap-2 mx-auto">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                        Restart Quiz
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 text-slate-500 py-6 text-center text-xs">
+        <p>© 2026 QuizMaster App. Built with HTML5, Tailwind CSS, and Vanilla JavaScript.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        const quizData = [
+            {
+                id: 1,
+                category: "Computer Science",
+                question: "Which data structure operates on a First-In-First-Out (FIFO) principle?",
+                options: ["Stack", "Queue", "Tree", "Graph"],
+                correctAnswer: 1,
+                explanation: "A Queue is a linear data structure that follows the First-In-First-Out (FIFO) rule."
+            },
+            {
+                id: 2,
+                category: "Web Development",
+                question: "What does CSS stand for?",
+                options: ["Computer Style Sheets", "Creative Style System", "Cascading Style Sheets", "Colorful Style Sheets"],
+                correctAnswer: 2,
+                explanation: "Cascading Style Sheets (CSS) is used for styling web documents."
+            },
+            {
+                id: 3,
+                category: "JavaScript",
+                question: "Which of the following is used to declare a block-scoped variable in modern JavaScript?",
+                options: ["var", "let", "function", "define"],
+                correctAnswer: 1,
+                explanation: "'let' and 'const' provide block scope in ES6."
+            },
+            {
+                id: 4,
+                category: "Cloud & DevOps",
+                question: "What is the primary purpose of version control systems like Git?",
+                options: [
+                    "To compile source code into machine code",
+                    "To track changes in source code over time and coordinate work among multiple developers",
+                    "To deploy applications directly to production servers automatically",
+                    "To format code indentation correctly"
+                ],
+                correctAnswer: 1,
+                explanation: "Git tracks history, manages branches, and enables multi-developer collaboration."
+            },
+            {
+                id: 5,
+                category: "Artificial Intelligence",
+                question: "Which algorithm is commonly used for training classification models by minimizing error using gradient descent?",
+                options: ["Binary Search", "Bubble Sort", "Backpropagation", "Dijkstra's Algorithm"],
+                correctAnswer: 2,
+                explanation: "Backpropagation calculates gradients to optimize neural network weights during training."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let isAnswered = false;
+
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQNum = document.getElementById('current-q-num');
+        const totalQNum = document.getElementById('total-q-num');
+        const currentScoreEl = document.getElementById('current-score');
+        const liveScoreEl = document.getElementById('live-score');
+        const nextBtn = document.getElementById('next-btn');
+        const explanationBox = document.getElementById('explanation-box');
+        const explanationText = document.getElementById('explanation-text');
+        const finalScoreVal = document.getElementById('final-score-val');
+        const finalPercentage = document.getElementById('final-percentage');
+        const restartBtn = document.getElementById('restart-btn');
+
+        totalQNum.textContent = quizData.length;
+
+        function renderQuestion() {
+            isAnswered = false;
+            nextBtn.classList.add('hidden');
+            explanationBox.classList.add('hidden');
+            
+            const currentQ = quizData[currentQuestionIndex];
+            currentQNum.textContent = currentQuestionIndex + 1;
+            currentScoreEl.textContent = score;
+            liveScoreEl.textContent = score;
+            
+            progressBar.style.width = `${((currentQuestionIndex) / quizData.length) * 100}%`;
+            questionText.textContent = currentQ.question;
+            document.getElementById('question-category').textContent = currentQ.category;
+
+            optionsContainer.innerHTML = '';
+            currentQ.options.forEach((option, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-4 rounded-xl bg-slate-900/60 border border-slate-700 hover:border-indigo-500 text-slate-200 font-medium text-sm flex items-center justify-between group';
+                btn.innerHTML = `
+                    <span class="flex items-center gap-3">
+                        <span class="w-7 h-7 rounded-lg bg-slate-800 text-slate-400 border border-slate-700 flex items-center justify-center text-xs font-bold group-hover:bg-indigo-600 group-hover:text-white transition-all">${String.fromCharCode(65 + index)}</span>
+                        ${option}
+                    </span>
+                `;
+                btn.addEventListener('click', () => selectAnswer(index, btn));
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex, selectedButton) {
+            if (isAnswered) return;
+            isAnswered = true;
+
+            const currentQ = quizData[currentQuestionIndex];
+            const optionButtons = optionsContainer.querySelectorAll('button');
+
+            optionButtons.forEach((btn, index) => {
+                btn.disabled = true;
+                if (index === currentQ.correctAnswer) {
+                    btn.classList.add('bg-emerald-500/10', 'border-emerald-500', 'text-emerald-300');
+                    btn.querySelector('span span').classList.add('bg-emerald-500', 'text-white');
+                } else if (index === selectedIndex) {
+                    btn.classList.add('bg-rose-500/10', 'border-rose-500', 'text-rose-300');
+                    btn.querySelector('span span').classList.add('bg-rose-500', 'text-white');
+                }
+            });
+
+            if (selectedIndex === currentQ.correctAnswer) {
+                score++;
+                currentScoreEl.textContent = score;
+                liveScoreEl.textContent = score;
+            }
+
+            if (currentQ.explanation) {
+                explanationText.textContent = currentQ.explanation;
+                explanationBox.classList.remove('hidden');
+            }
+
+            nextBtn.classList.remove('hidden');
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerHTML = `View Results <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>`;
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                renderQuestion();
+            } else {
+                quizScreen.classList.add('hidden');
+                resultsScreen.classList.remove('hidden');
+                finalScoreVal.textContent = `${score}/${quizData.length}`;
+                finalPercentage.textContent = `${Math.round((score / quizData.length) * 100)}% Accuracy`;
+            }
+        });
+
+        restartBtn.addEventListener('click', () => {
+            currentQuestionIndex = 0;
+            score = 0;
+            isAnswered = false;
+            resultsScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            nextBtn.innerHTML = `Next Question <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>`;
+            renderQuestion();
+        });
+
+        // Initialize first question immediately
+        renderQuestion();
+    </script>
+</body>
+</html>

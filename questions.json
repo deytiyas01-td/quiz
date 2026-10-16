@@ -1,0 +1,67 @@
+[
+    {
+        "id": 1,
+        "category": "Computer Science",
+        "question": "Which data structure operates on a First-In-First-Out (FIFO) principle?",
+        "options": [
+            "Stack",
+            "Queue",
+            "Tree",
+            "Graph"
+        ],
+        "correctAnswer": 1,
+        "explanation": "A Queue is a linear data structure that follows the First-In-First-Out (FIFO) rule, meaning the element inserted first is the first one to be removed."
+    },
+    {
+        "id": 2,
+        "category": "Web Development",
+        "question": "What does CSS stand for?",
+        "options": [
+            "Computer Style Sheets",
+            "Creative Style System",
+            "Cascading Style Sheets",
+            "Colorful Style Sheets"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Cascading Style Sheets (CSS) is a style sheet language used for describing the presentation of a document written in HTML."
+    },
+    {
+        "id": 3,
+        "category": "JavaScript",
+        "question": "Which of the following is used to declare a block-scoped variable in modern JavaScript?",
+        "options": [
+            "var",
+            "let",
+            "function",
+            "define"
+        ],
+        "correctAnswer": 1,
+        "explanation": "'let' (along with 'const') was introduced in ES6 to provide block scope, unlike 'var' which is function-scoped."
+    },
+    {
+        "id": 4,
+        "category": "Cloud & DevOps",
+        "question": "What is the primary purpose of version control systems like Git?",
+        "options": [
+            "To compile source code into machine code",
+            "To track changes in source code over time and coordinate work among multiple developers",
+            "To deploy applications directly to production servers automatically without testing",
+            "To format code indentation correctly"
+        ],
+        "correctAnswer": 1,
+        "explanation": "Git allows developers to track history, manage branches, merge changes, and collaborate efficiently on codebases."
+    },
+    {
+        "id": 5,
+        "category": "Artificial Intelligence",
+        "question": "Which algorithm is commonly used for training classification models by minimizing error using gradient descent?",
+        "options": [
+            "Binary Search",
+            "Bubble Sort",
+            "Backpropagation",
+            "Dijkstra's Algorithm"
+        ],
+        "correctAnswer": 2,
+        "explanation": "Backpropagation is the core algorithm used in neural networks to calculate gradients and update weights efficiently during training."
+    }
+]
